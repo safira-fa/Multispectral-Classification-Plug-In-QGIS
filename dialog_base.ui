@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MultispectralClassifierDialogBase</class>
+ <widget class="QDialog" name="MultispectralClassifierDialogBase">
+  <property name="geometry">
+   <rect><x>0</x><y>0</y><width>900</width><height>750</height></rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>ML-классификация мультиспектрального снимка</string>
+  </property>
+  <layout class="QVBoxLayout" name="main_layout">
+   <item>
+    <widget class="QTabWidget" name="tab_widget">
+     <property name="tabPosition"><enum>QTabWidget::North</enum></property>
+     <property name="tabShape"><enum>QTabWidget::Rounded</enum></property>
+     <property name="currentIndex"><number>0</number></property>
+     
+     <!-- ВКЛАДКА 1: КЛАССИФИКАЦИЯ -->
+     <widget class="QWidget" name="tab_classification">
+      <attribute name="title"><string>Классификация</string></attribute>
+      <layout class="QVBoxLayout" name="tab_classification_layout">
+       
+       <!-- Входной растр -->
+       <item>
+        <widget class="QGroupBox" name="file_group">
+         <property name="title"><string>Входной растр</string></property>
+         <layout class="QVBoxLayout" name="file_layout">
+          <item>
+           <layout class="QHBoxLayout" name="raster_source_layout">
+            <item>
+             <widget class="QRadioButton" name="raster_from_project_radio">
+              <property name="text"><string>Из проекта QGIS</string></property>
+              <property name="checked"><bool>true</bool></property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="raster_from_file_radio">
+              <property name="text"><string>Файл с диска</string></property>
+             </widget>
+            </item>
+            <item><spacer><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QgsMapLayerComboBox" name="raster_layer_combo">
+            <property name="minimumWidth"><number>300</number></property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="tiff_layout">
+            <item>
+             <widget class="QLineEdit" name="tiff_path_edit">
+              <property name="enabled"><bool>false</bool></property>
+              <property name="placeholderText"><string>Выберите .tif файл...</string></property>
+              <property name="minimumWidth"><number>300</number></property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="browse_tiff_btn">
+              <property name="enabled"><bool>false</bool></property>
+              <property name="text"><string>Обзор...</string></property>
+              <property name="minimumWidth"><number>100</number></property>
+             </widget>
+            </item>
+            <item><spacer><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
+            <item>
+             <widget class="QPushButton" name="info_btn">
+              <property name="text"><string>Инфо о снимке</string></property>
+              <property name="minimumWidth"><number>80</number></property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="channels_info_label">
+            <property name="visible"><bool>false</bool></property>
+            <property name="text"><string></string></property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+
+       <!-- ML-модель -->
+       <item>
+        <widget class="QGroupBox" name="model_group">
+         <property name="title"><string>ML-модель</string></property>
+         <layout class="QVBoxLayout" name="model_layout">
+          <item>
+           <layout class="QHBoxLayout" name="model_source_layout">
+            <item>
+             <widget class="QRadioButton" name="train_new_model_radio">
+              <property name="text"><string>Обучить новую</string></property>
+              <property name="checked"><bool>true</bool></property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="load_pretrained_radio">
+              <property name="text"><string>Загрузить .joblib</string></property>
+             </widget>
+            </item>
+            <item><spacer><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QWidget" name="train_widget" native="true">
+            <layout class="QVBoxLayout" name="train_layout">
+             <property name="leftMargin"><number>10</number></property>
+             <item>
+              <layout class="QHBoxLayout" name="labels_layout">
+               <item><widget class="QLabel"><property name="text"><string>Слой меток:</string></property></widget></item>
+               <item><widget class="QgsMapLayerComboBox" name="labels_layer_combo">
+                <property name="minimumWidth"><number>200</number></property>
+               </widget></item>
+               <item><widget class="QLabel"><property name="text"><string>Поле:</string></property></widget></item>
+               <item><widget class="QgsFieldComboBox" name="labels_field_combo">
+                <property name="minimumWidth"><number>120</number></property>
+               </widget></item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="model_type_layout">
+               <item><widget class="QLabel"><property name="text"><string>Тип:</string></property></widget></item>
+               <item>
+                <widget class="QComboBox" name="model_type_combo">
+                 <property name="minimumWidth"><number>150</number></property>
+                 <item><property name="text"><string>Random Forest</string></property></item>
+                 <item><property name="text"><string>SVM</string></property></item>
+                </widget>
+               </item>
+               <item><spacer><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
+              </layout>
+             </item>
+             <item>
+              <widget class="QWidget" name="rf_params_widget" native="true">
+               <layout class="QHBoxLayout" name="rf_layout">
+                <item><widget class="QLabel"><property name="text"><string>Деревьев:</string></property></widget></item>
+                <item>
+                 <widget class="QComboBox" name="rf_n_estimators">
+                  <property name="minimumWidth"><number>70</number></property>
+                  <item><property name="text"><string>50</string></property></item>
+                  <item><property name="text"><string>100</string></property></item>
+                  <item><property name="text"><string>200</string></property></item>
+                  <item><property name="text"><string>300</string></property></item>
+                 </widget>
+                </item>
+                <item><widget class="QLabel"><property name="text"><string>Глубина:</string></property></widget></item>
+                <item>
+                 <widget class="QComboBox" name="rf_max_depth">
+                  <property name="minimumWidth"><number>70</number></property>
+                  <item><property name="text"><string>10</string></property></item>
+                  <item><property name="text"><string>15</string></property></item>
+                  <item><property name="text"><string>20</string></property></item>
+                  <item><property name="text"><string>None</string></property></item>
+                 </widget>
+                </item>
+                <item><spacer><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="svm_params_widget" native="true">
+               <layout class="QHBoxLayout" name="svm_layout">
+                <item><widget class="QLabel"><property name="text"><string>Ядро:</string></property></widget></item>
+                <item>
+                 <widget class="QComboBox" name="svm_kernel">
+                  <property name="minimumWidth"><number>80</number></property>
+                  <item><property name="text"><string>rbf</string></property></item>
+                  <item><property name="text"><string>linear</string></property></item>
+                  <item><property name="text"><string>poly</string></property></item>
+                  <item><property name="text"><string>sigmoid</string></property></item>
+                 </widget>
+                </item>
+                <item><widget class="QLabel"><property name="text"><string>C:</string></property></widget></item>
+                <item>
+                 <widget class="QComboBox" name="svm_C">
+                  <property name="minimumWidth"><number>70</number></property>
+                  <item><property name="text"><string>0.1</string></property></item>
+                  <item><property name="text"><string>1.0</string></property></item>
+                  <item><property name="text"><string>10.0</string></property></item>
+                  <item><property name="text"><string>100.0</string></property></item>
+                 </widget>
+                </item>
+                <item><spacer><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_train_ml">
+               <property name="text"><string>Обучить модель</string></property>
+               <property name="minimumWidth"><number>200</number></property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="pretrained_widget" native="true">
+            <layout class="QHBoxLayout" name="pretrained_layout">
+             <property name="leftMargin"><number>10</number></property>
+             <item>
+              <widget class="QLineEdit" name="pretrained_path_edit">
+               <property name="enabled"><bool>false</bool></property>
+               <property name="placeholderText"><string>Путь к .joblib файлу...</string></property>
+               <property name="minimumWidth"><number>300</number></property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="browse_pretrained_btn">
+               <property name="enabled"><bool>false</bool></property>
+               <property name="text"><string>Обзор...</string></property>
+               <property name="minimumWidth"><number>100</number></property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="ml_status_label">
+            <property name="text"><string></string></property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+
+       <!-- База данных -->
+       <item>
+        <widget class="QGroupBox" name="db_group">
+         <property name="title"><string>База данных</string></property>
+         <layout class="QVBoxLayout" name="db_layout">
+          <item>
+           <layout class="QHBoxLayout" name="db_conn_layout">
+            <item><widget class="QLabel"><property name="text"><string>Хост:</string></property></widget></item>
+            <item><widget class="QLineEdit" name="db_host_edit">
+             <property name="text"><string>192.168.0.0</string></property>
+             <property name="minimumWidth"><number>110</number></property>
+             <property name="maximumWidth"><number>160</number></property>
+            </widget></item>
+            <item><widget class="QLabel"><property name="text"><string>Порт:</string></property></widget></item>
+            <item><widget class="QLineEdit" name="db_port_edit">
+             <property name="text"><string>5432</string></property>
+             <property name="minimumWidth"><number>50</number></property>
+             <property name="maximumWidth"><number>60</number></property>
+            </widget></item>
+            <item><widget class="QLabel"><property name="text"><string>БД:</string></property></widget></item>
+            <item><widget class="QLineEdit" name="db_name_edit">
+             <property name="text"><string></string></property>
+             <property name="minimumWidth"><number>100</number></property>
+             <property name="maximumWidth"><number>140</number></property>
+            </widget></item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="db_auth_layout">
+            <item><widget class="QLabel"><property name="text"><string>Пользователь:</string></property></widget></item>
+            <item><widget class="QLineEdit" name="db_user_edit">
+             <property name="text"><string></string></property>
+             <property name="minimumWidth"><number>100</number></property>
+             <property name="maximumWidth"><number>140</number></property>
+            </widget></item>
+            <item><widget class="QLabel"><property name="text"><string>Пароль:</string></property></widget></item>
+            <item><widget class="QLineEdit" name="db_pass_edit">
+             <property name="text"><string></string></property>
+             <property name="echoMode"><enum>QLineEdit::Password</enum></property>
+             <property name="minimumWidth"><number>100</number></property>
+            </widget></item>
+            <item><widget class="QPushButton" name="btn_db_test">
+             <property name="text"><string>Тест</string></property>
+             <property name="minimumWidth"><number>80</number></property>
+            </widget></item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="db_list_layout">
+            <item>
+             <widget class="QListWidget" name="models_list_widget">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumHeight"><number>80</number></property>
+              <property name="maximumHeight"><number>120</number></property>
+              <property name="toolTip"><string>Двойной клик — загрузить модель</string></property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="db_buttons_layout">
+              <item><widget class="QPushButton" name="btn_db_refresh">
+               <property name="text"><string>Обновить</string></property>
+               <property name="minimumWidth"><number>120</number></property>
+              </widget></item>
+              <item><widget class="QPushButton" name="btn_db_load">
+               <property name="text"><string>Загрузить</string></property>
+               <property name="minimumWidth"><number>120</number></property>
+              </widget></item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="db_status_label">
+            <property name="text"><string>Не подключено</string></property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+
+       <!-- Прогресс -->
+       <item>
+        <widget class="QProgressBar" name="progress_bar">
+         <property name="visible"><bool>false</bool></property>
+         <property name="format"><string>%p%</string></property>
+        </widget>
+       </item>
+
+       <!-- Кнопки управления (растянуты на всю ширину) -->
+       <item>
+        <layout class="QHBoxLayout" name="button_layout">
+         <item>
+          <widget class="QPushButton" name="cancel_btn">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text"><string>Отмена</string></property>
+           <property name="minimumHeight"><number>35</number></property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="run_btn">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>2</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text"><string>▶ Выполнить классификацию</string></property>
+           <property name="default"><bool>true</bool></property>
+           <property name="minimumHeight"><number>35</number></property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+
+       <!-- СТРЕТЧ: прижимает все элементы к верху -->
+       <item>
+        <spacer name="vertical_spacer">
+         <property name="orientation"><enum>Qt::Vertical</enum></property>
+         <property name="sizeHint" stdset="0">
+          <size><width>20</width><height>40</height></size>
+         </property>
+        </spacer>
+       </item>
+
+      </layout>
+     </widget>
+
+     <!-- ВКЛАДКА 2: РЕЗУЛЬТАТЫ -->
+     <widget class="QWidget" name="tab_results">
+      <attribute name="title"><string>Результаты</string></attribute>
+      <layout class="QVBoxLayout" name="tab_results_layout">
+       
+       <!-- Отчёт (растягивается) -->
+       <item>
+        <widget class="QGroupBox" name="report_group">
+         <property name="title"><string>Отчёт о классификации</string></property>
+         <layout class="QVBoxLayout" name="report_layout">
+          <item>
+           <widget class="QTextEdit" name="report_text_edit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="readOnly"><bool>true</bool></property>
+            <property name="placeholderText"><string>После выполнения классификации здесь появится отчёт.</string></property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+
+       <!-- Сохранение модели (кнопки растянуты) -->
+       <item>
+        <widget class="QGroupBox" name="save_model_group">
+         <property name="title"><string>Сохранение модели</string></property>
+         <layout class="QHBoxLayout" name="save_model_layout">
+          <item>
+           <widget class="QPushButton" name="btn_save_model_to_db">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text"><string>Сохранить в БД</string></property>
+            <property name="minimumHeight"><number>35</number></property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btn_save_model_to_file">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text"><string>Сохранить в файл</string></property>
+            <property name="minimumHeight"><number>35</number></property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+
+      </layout>
+     </widget>
+
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QgsMapLayerComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qgsmaplayercombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QgsFieldComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qgsfieldcombobox.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

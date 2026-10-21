@@ -1,0 +1,10 @@
+[general]
+name=Multispectral Classifier
+qgisMinimumVersion=3.0
+qgisMaximumVersion=3.99
+description=Классификация мультиспектральных снимков для детекции нефти, растительности, дорог и нефтяной инфраструктуры
+about=Модуль для автоматической классификации мультиспектральных аэрофотоснимков с целью выявления нефтяных загрязнений и нарушенных земель с помощью методов библиотеки scikit-learn.
+version=1.0
+author=Safira Soldatova
+email=safira.fa@mail.ru
+tags=raster, classification, multispectral, oil, vegetation, remote sensing, machine learning
