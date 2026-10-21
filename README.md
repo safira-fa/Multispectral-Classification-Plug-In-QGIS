@@ -4,7 +4,7 @@
 
 - init.py - запуск плагина
 - plugin.py - основной код плагина
-- db_storage.py - связь с БД POstreSQL
+- db_storage.py - связь с БД PostgreSQL
 - classifiers.py - алгоритмы МО
 - dialog.py - логика диалогового окна
 - dialog_base.ui - графический интерфейс через Qt
